@@ -1,3 +1,4 @@
+% Dead Pixel Correction
 function [DPCresult]= DPC(Raw,threshold)
     Raw=padarray(Raw,[2 2],'replicate');
     SubRaw=split_Raw(Raw);

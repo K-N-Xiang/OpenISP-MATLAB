@@ -21,7 +21,8 @@ Raw=read_Raw(filename,width,height);
 
 % Raw=add_salt_pepper_noise(Raw,0.0001);
 Raw=DPC(Raw,DPC_threshold);
-Raw1=BLC(Raw,alpha,beta,bl_array);
+Raw=BLC(Raw,alpha,beta,bl_array);
+Raw1=AAF(Raw);
 %% 
 subplot(1,2,1);
 imshow(Raw);

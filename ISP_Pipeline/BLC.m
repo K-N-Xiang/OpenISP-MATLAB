@@ -1,3 +1,4 @@
+% Black Level Compensation
 function [BLCresult]= BLC(Raw,alpha,beta,bl_array)
     SubRaw=split_Raw(Raw);
     SubRaw(:,:,1)=max(SubRaw(:,:,1)-bl_array(1),0);
