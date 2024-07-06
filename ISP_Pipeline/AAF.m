@@ -1,7 +1,7 @@
 % Anti-aliasing Filter
 function [AAFresult]=AAF(Raw)
     Raw=padarray(Raw,[2 2],'replicate');
-    SubRaw=split_Raw(Raw);
+    SubRaw=split_Raw(Raw,'nopadding');
     [W,H,C]=size(SubRaw);
     AAFSubRaw=zeros([W-2 H-2 C]);
     for k=1:C
