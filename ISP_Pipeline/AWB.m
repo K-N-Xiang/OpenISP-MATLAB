@@ -11,4 +11,6 @@ function [AWBresult]=AWB(Raw)
     SubRaw(:,:,2:3)=SubRaw(:,:,2:3)*lightmean/gg;
     SubRaw(:,:,4)=SubRaw(:,:,4)*lightmean/bg;
     AWBresult=reconstruct_Raw(SubRaw);
+    % AWBresult = max(min(AWBresult, 1), 0);
+    AWBresult=AWBresult/max(max(AWBresult));
 end
