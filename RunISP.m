@@ -20,6 +20,11 @@ ccm=[[1, 0, 0, 0];
      [0, 0, 1, 0]];
 %% GAC
 gamma=2.2;
+%% NLM
+search_window_size=9;
+patch_size=3;
+h=10;
+
 
 
 %% Test
@@ -39,14 +44,18 @@ RGB=CFA(Raw1);
 RGB1=CCM(RGB,ccm);
 RGB1=GAC(RGB1,gamma);
 YUV=CSC(RGB1);
+YUV1=YUV;
+YUV1(:,:,1)=NLM(YUV1(:,:,1),search_window_size,patch_size,h);
 %% 
-subplot(1,5,1);
+subplot(1,6,1);
 imshow(Raw);
-subplot(1,5,2);
+subplot(1,6,2);
 imshow(Raw1);
-subplot(1,5,3);
+subplot(1,6,3);
 imshow(RGB);
-subplot(1,5,4);
+subplot(1,6,4);
 imshow(RGB1);
-subplot(1,5,5);
+subplot(1,6,5);
 imshow(YUV);
+subplot(1,6,6);
+imshow(YUV1);
