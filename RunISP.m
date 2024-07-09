@@ -24,6 +24,15 @@ gamma=2.2;
 search_window_size=9;
 patch_size=3;
 h=10;
+%% BNF
+intensity_sigma=0.8;
+spatial_sigma=0.8;
+%% EEH
+edge_gain=1.5;                  
+flat_threshold=0.0256;                   
+edge_threshold=0.0512;            
+delta_top=0.25;
+
 
 
 
@@ -46,6 +55,8 @@ RGB1=GAC(RGB1,gamma);
 YUV=CSC(RGB1);
 YUV1=YUV;
 YUV1(:,:,1)=NLM(YUV1(:,:,1),search_window_size,patch_size,h);
+YUV1(:,:,1)=BNF(YUV1(:,:,1),intensity_sigma,spatial_sigma);
+YUV1(:,:,1)=EEH(YUV1(:,:,1),edge_gain,flat_threshold,edge_threshold,delta_top);
 %% 
 subplot(1,6,1);
 imshow(Raw);
