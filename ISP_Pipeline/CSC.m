@@ -1,4 +1,4 @@
-% Color Space Conversion
+% Color Space Conversion (RGB to YUV)
 function [CSCresult]= CSC(RGB)
     [W,H,C]=size(RGB);
     conversion_matrix=transpose([[0.299, 0.587, 0.114];
