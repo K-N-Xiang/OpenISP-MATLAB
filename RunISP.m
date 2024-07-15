@@ -4,8 +4,6 @@ clc
 
 folder_paths = {'./ISP_Pipeline','./utils','./noise_test'};
 addpath(folder_paths{:});
-%% Gain
-gain=1;
 %% DPC
 DPC_threshold=0.75;
 %% BLC
@@ -15,9 +13,9 @@ bl_array=[0.005,0.005,0.005,0.005];
 %% CNF
 CNF_threshold=0;
 %% CCM
-ccm=[[1, 0, 0, 0];
-     [0, 1, 0, 0];
-     [0, 0, 1, 0]];
+ccm=[[1670, -508, -139, 0];
+     [-20, 1404, -360, 0];
+     [58, -406, 1372, 0]]/1024;
 %% GAC
 gamma=2.2;
 %% NLM
@@ -35,51 +33,74 @@ delta_top=0.25;
 %% CEH
 x_tiles=6;
 y_tiles=4;
+clip_limit=0.005;
 %% FCS
 delta_min=0.0512;
 delta_max=0.25;
 %% HSC
 hue_offset=0;
 saturation_gain=1;
+%% BCC
+brightness_offset=0;
+contrast_gain=1.01;
+
 
 %% Test
-filename = './Raw/test.raw';
-width=1920;
-height=1080;
+filename = './Raw/connan_raw14.raw';
+width=6080;
+height=4044;
+
+tic
 
 Raw=read_Raw(filename,width,height);
 
-% Raw=add_salt_pepper_noise(Raw,0.0001);
-Raw1=DPC(Raw,DPC_threshold);
-Raw1=BLC(Raw1,alpha,beta,bl_array);
-Raw1=AAF(Raw1);
-Raw1=AWB(Raw1);
-Raw1=CNF(Raw1,CNF_threshold,gain);
-RGB=CFA(Raw1);
-RGB1=CCM(RGB,ccm);
-RGB1=GAC(RGB1,gamma);
-YUV=CSC(RGB1);
-YUV1=YUV;
-YUV1(:,:,1)=NLM(YUV1(:,:,1),search_window_size,patch_size,h);
-YUV1(:,:,1)=BNF(YUV1(:,:,1),intensity_sigma,spatial_sigma);
-YUV1(:,:,1)=EEH(YUV1(:,:,1),edge_gain,flat_threshold,edge_threshold,delta_top);
-YUV1(:,:,1)=CEH(YUV1(:,:,1),x_tiles,y_tiles);
-YUV1=FCS(YUV1,delta_min,delta_max);
-YUV1(:,:,2:3)=HSC(YUV1(:,:,2:3),hue_offset,saturation_gain);
-result=CSC_(YUV1);
-%% 
-subplot(1,7,1);
-imshow(Raw);
-subplot(1,7,2);
-imshow(Raw1);
-subplot(1,7,3);
-imshow(RGB);
-subplot(1,7,4);
-imshow(RGB1);
-subplot(1,7,5);
-imshow(YUV);
-subplot(1,7,6);
-imshow(YUV1);
-subplot(1,7,7);
-imshow(result);
-imwrite(imrotate(result,-90),"./result/test_result.bmp");
+Raw=DPC(Raw,DPC_threshold);
+imwrite(fliplr(imrotate(Raw,-90)),"./result/DPC.png");
+
+Raw=BLC(Raw,alpha,beta,bl_array);
+imwrite(fliplr(imrotate(Raw,-90)),"./result/BLC.png");
+
+Raw=AAF(Raw);
+imwrite(fliplr(imrotate(Raw,-90)),"./result/AAF.png");
+
+[Raw,Gain]=AWB(Raw,'GrayWorld');
+imwrite(fliplr(imrotate(Raw,-90)),"./result/AWB.png");
+
+Raw=CNF(Raw,CNF_threshold,Gain);
+imwrite(fliplr(imrotate(Raw,-90)),"./result/CNF.png");
+
+RGB=CFA(Raw);
+imwrite(fliplr(imrotate(RGB,-90)),"./result/CFA.png");
+
+RGB=CCM(RGB,ccm);
+imwrite(fliplr(imrotate(RGB,-90)),"./result/CCM.png");
+
+RGB=GAC(RGB,gamma);
+imwrite(fliplr(imrotate(RGB,-90)),"./result/GAC.png");
+
+YUV=CSC(RGB);
+imwrite(fliplr(imrotate(CSC_(YUV),-90)),"./result/CSC.png");
+
+% YUV(:,:,1)=NLM(YUV(:,:,1),search_window_size,patch_size,h);
+% imwrite(fliplr(imrotate(CSC_(YUV),-90)),"./result/NLM.png");
+
+YUV(:,:,1)=BNF(YUV(:,:,1),intensity_sigma,spatial_sigma);
+imwrite(fliplr(imrotate(CSC_(YUV),-90)),"./result/BNF.png");
+
+YUV(:,:,1)=EEH(YUV(:,:,1),edge_gain,flat_threshold,edge_threshold,delta_top);
+imwrite(fliplr(imrotate(CSC_(YUV),-90)),"./result/EEH.png");
+
+YUV(:,:,1)=CEH(YUV(:,:,1),x_tiles,y_tiles,clip_limit);
+imwrite(fliplr(imrotate(CSC_(YUV),-90)),"./result/CEH.png");
+
+YUV=FCS(YUV,delta_min,delta_max);
+imwrite(fliplr(imrotate(CSC_(YUV),-90)),"./result/FCS.png");
+
+YUV(:,:,2:3)=HSC(YUV(:,:,2:3),hue_offset,saturation_gain);
+imwrite(fliplr(imrotate(CSC_(YUV),-90)),"./result/HSC.png");
+
+YUV(:,:,1)=BCC(YUV(:,:,1),brightness_offset,contrast_gain);
+imwrite(fliplr(imrotate(CSC_(YUV),-90)),"./result/BCC.png");
+
+toc
+disp('ISP Complete');

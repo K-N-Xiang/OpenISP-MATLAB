@@ -1,5 +1,6 @@
 % Non-Local Means Denoising
 function [NLMresult]= NLM(Y,search_window_size,patch_size,h)
+    tic
     pad_size=floor(search_window_size/2);
     Y=padarray(Y,[pad_size pad_size],'replicate');
     [W,H]=size(Y);
@@ -12,6 +13,8 @@ function [NLMresult]= NLM(Y,search_window_size,patch_size,h)
         end
     end
     NLMresult=NLMresult(pad_size+1:W-pad_size,pad_size+1:H-pad_size);
+    toc
+    disp('NLM Complete');
 end
 
 function [weights_count_result]=NLM_weight_count(Y,x,y,pad_size,patch_size,distance_weights_lut)

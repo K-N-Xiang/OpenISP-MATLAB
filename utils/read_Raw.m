@@ -5,5 +5,5 @@ function [Raw]= read_Raw(filename,width,height)
     k=len/(width*height);
     fclose(fid);
     Raw = reshape(raw_data, width, height, k);
-    Raw = (Raw-min(min(Raw)))/(max(max(Raw))-min(min(Raw)));
+    Raw = Raw/max(max(Raw));
 end

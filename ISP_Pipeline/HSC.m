@@ -1,5 +1,6 @@
 % Hue Saturation Control
 function [HSCresult]= HSC(UV,hue_offset,saturation_gain)
+    tic
     hue_offset=hue_offset/180*pi;
     sin_hue=sin(hue_offset);
     cos_hue=cos(hue_offset);
@@ -11,4 +12,6 @@ function [HSCresult]= HSC(UV,hue_offset,saturation_gain)
     hsc_v_img=hsc_v_img*saturation_gain+0.5;
     HSCresult=cat(3,hsc_u_img,hsc_v_img);
     HSCresult=min(max(HSCresult,0),1);
+    toc
+    disp('HSC Complete');
 end

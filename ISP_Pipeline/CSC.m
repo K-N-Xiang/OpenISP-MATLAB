@@ -1,5 +1,6 @@
 % Color Space Conversion (RGB to YUV)
 function [CSCresult]= CSC(RGB)
+    tic
     [W,H,C]=size(RGB);
     conversion_matrix=transpose([[0.299, 0.587, 0.114];
                        [-0.1687, -0.3313, 0.5];
@@ -11,4 +12,6 @@ function [CSCresult]= CSC(RGB)
         CSCresult(:,i)=CSCresult(:,i)+conversion_bias(i);
     end
     CSCresult=reshape(CSCresult,W,H,C);
+    toc
+    disp('CSC Complete');
 end

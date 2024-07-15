@@ -1,5 +1,6 @@
 % Dead Pixel Correction
 function [DPCresult]= DPC(Raw,threshold)
+    tic
     Raw=padarray(Raw,[2 2],'replicate');
     SubRaw=split_Raw(Raw,'nopadding');
     [W,H,C]=size(SubRaw);
@@ -31,4 +32,6 @@ function [DPCresult]= DPC(Raw,threshold)
     end
     DPCresult=reconstruct_Raw(SubRaw);
     DPCresult=DPCresult(3:2*W-2,3:2*H-2);
+    toc
+    disp('DPC Complete');
 end

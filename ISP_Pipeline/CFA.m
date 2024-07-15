@@ -1,5 +1,6 @@
 % Color Filter Array Interpolation (Demosaic)
 function [CFAresult]=CFA(Raw)
+    tic
     Raw=padarray(Raw,[2 2],'replicate');
     SubRaw=split_Raw(Raw,'padding');
     [W,H,~]=size(SubRaw);
@@ -33,4 +34,6 @@ function [CFAresult]=CFA(Raw)
     end
     B=B(3:W-2,3:H-2);
     CFAresult=cat(3,R,G,B);
+    toc
+    disp('CFA Complete');
 end

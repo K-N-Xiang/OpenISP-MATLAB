@@ -1,5 +1,6 @@
 % Edge Enhancement
 function [EEHresult]= EEH(Y,edge_gain,flat_threshold,edge_threshold,delta_top)
+    tic
     [W,H]=size(Y);
     t1=flat_threshold;
     t2=edge_threshold;
@@ -25,4 +26,6 @@ function [EEHresult]= EEH(Y,edge_gain,flat_threshold,edge_threshold,delta_top)
     EEHresult=Y+enhanced_delta;
     EEHresult=min(max(EEHresult,0),1);
     % EEHresult=EEHresult/max(max(EEHresult));
+    toc
+    disp('EEH Complete');
 end

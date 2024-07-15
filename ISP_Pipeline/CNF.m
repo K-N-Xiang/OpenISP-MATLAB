@@ -1,10 +1,11 @@
 % Chroma Noise Filtering
 function [CNFresult]= CNF(Raw,CNF_threshold,gain)
+    tic
     SubRaw=split_Raw(Raw,'nopadding');
     [avg_r,avg_g,avg_b,is_r_noise,is_b_noise]= CND(SubRaw,CNF_threshold);
     y=0.299 * avg_r + 0.587 * avg_g + 0.114 * avg_b;
-    r_cnc=CNC(SubRaw(:,:,1),avg_g,avg_r,avg_b,y,gain);
-    b_cnc=CNC(SubRaw(:,:,4),avg_g,avg_b,avg_r,y,gain);
+    r_cnc=CNC(SubRaw(:,:,1),avg_g,avg_r,avg_b,y,gain(1));
+    b_cnc=CNC(SubRaw(:,:,4),avg_g,avg_b,avg_r,y,gain(4));
     [W,H,~]=size(SubRaw);
     for i=1:W
         for j=1:H
@@ -17,6 +18,9 @@ function [CNFresult]= CNF(Raw,CNF_threshold,gain)
         end
     end
     CNFresult=reconstruct_Raw(SubRaw);
+    CNFresult = max(min(CNFresult, 1), 0);
+    toc
+    disp('CNF Complete');
 end
 
 % Chroma Noise detect
@@ -44,10 +48,18 @@ end
 
 % Chroma Noise correct
 function [CNCresult]= CNC(img,avg_g, avg_c1, avg_c2, y, gain)
+
+    if gain <= 1
+        damp_factor = 1;
+    elseif 1 < gain && gain <= 1.2
+        damp_factor = 0.5;
+    else
+        damp_factor = 0.3;
+    end
     [W,H]=size(img);
     max_avg=max(avg_g,avg_c2);
     signal_gap = img - max_avg;
-    chroma_corrected = max_avg + gain*signal_gap;
+    chroma_corrected = max_avg + damp_factor*signal_gap;
 
     fade1=zeros([W,H]);
     fade2=zeros([W,H]);
