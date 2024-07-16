@@ -27,8 +27,8 @@ intensity_sigma=0.8;
 spatial_sigma=0.8;
 %% EEH
 edge_gain=1.5;                  
-flat_threshold=0.0512;                   
-edge_threshold=0.1024;            
+flat_threshold=0.0236;                   
+edge_threshold=0.0512;            
 delta_top=0.25;
 %% CEH
 x_tiles=6;
