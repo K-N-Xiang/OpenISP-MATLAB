@@ -5,7 +5,7 @@ clc
 folder_paths = {'./ISP_Pipeline','./utils','./noise_test'};
 addpath(folder_paths{:});
 %% DPC
-DPC_threshold=0.75;
+DPC_threshold=0.1175;
 %% BLC
 alpha=0;
 beta=0;
@@ -27,8 +27,8 @@ intensity_sigma=0.8;
 spatial_sigma=0.8;
 %% EEH
 edge_gain=1.5;                  
-flat_threshold=0.0236;                   
-edge_threshold=0.0512;            
+flat_threshold=0.0512;                   
+edge_threshold=0.1024;            
 delta_top=0.25;
 %% CEH
 x_tiles=6;
@@ -42,7 +42,7 @@ hue_offset=0;
 saturation_gain=1;
 %% BCC
 brightness_offset=0;
-contrast_gain=1.01;
+contrast_gain=1.015;
 
 
 %% Test
@@ -59,6 +59,9 @@ imwrite(fliplr(imrotate(Raw,-90)),"./result/DPC.png");
 
 Raw=BLC(Raw,alpha,beta,bl_array);
 imwrite(fliplr(imrotate(Raw,-90)),"./result/BLC.png");
+
+Raw=LSC(Raw);
+imwrite(fliplr(imrotate(Raw,-90)),"./result/LSC.png");
 
 Raw=AAF(Raw);
 imwrite(fliplr(imrotate(Raw,-90)),"./result/AAF.png");
@@ -81,8 +84,8 @@ imwrite(fliplr(imrotate(RGB,-90)),"./result/GAC.png");
 YUV=CSC(RGB);
 imwrite(fliplr(imrotate(CSC_(YUV),-90)),"./result/CSC.png");
 
-% YUV(:,:,1)=NLM(YUV(:,:,1),search_window_size,patch_size,h);
-% imwrite(fliplr(imrotate(CSC_(YUV),-90)),"./result/NLM.png");
+YUV(:,:,1)=NLM(YUV(:,:,1),search_window_size,patch_size,h);
+imwrite(fliplr(imrotate(CSC_(YUV),-90)),"./result/NLM.png");
 
 YUV(:,:,1)=BNF(YUV(:,:,1),intensity_sigma,spatial_sigma);
 imwrite(fliplr(imrotate(CSC_(YUV),-90)),"./result/BNF.png");

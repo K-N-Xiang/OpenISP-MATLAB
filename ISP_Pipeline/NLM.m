@@ -1,7 +1,7 @@
 % Non-Local Means Denoising
 function [NLMresult]= NLM(Y,search_window_size,patch_size,h)
     tic
-    NLMresult=imnlmfilt(Y,"SearchWindowSize",search_window_size,"ComparisonWindowSize",patch_size,"DegreeOfSmoothing",h);
+    NLMresult=imnlmfilt(Y,"SearchWindowSize",search_window_size,"ComparisonWindowSize",patch_size);
     %% 
     % NLMresult=Mynlmfilt(Y,search_window_size,patch_size,h);
     toc
