@@ -20,16 +20,6 @@ function [LSCresult]= LSC(Raw)
     correctionFactor(sortIdx) = sorted_correctionFactor;
     correctionFactor = max(min(correctionFactor, 2), 0);
     LSCresult=Raw.*correctionFactor;
-    % LSCresult=zeros([W,H]);
-    % for i=1:W
-    %     for j=1:H
-    %         if((i-W/2)^2+(j-H/2)^2>(W^2+H^2)/5)
-    %             LSCresult(i,j)=Raw(i,j)*correctionFactor(i,j);
-    %         else
-    %             LSCresult(i,j)=Raw(i,j);
-    %         end
-    %     end
-    % end
     toc
     disp('LSC Complete');
 end

@@ -2,7 +2,7 @@ clear
 close all
 clc
 
-folder_paths = {'./ISP_Pipeline','./utils','./noise_test'};
+folder_paths = {'./ISP_Pipeline','./utils'};
 addpath(folder_paths{:});
 %% DPC
 DPC_threshold=0.1175;
@@ -66,7 +66,7 @@ imwrite(fliplr(imrotate(Raw,-90)),"./result/LSC.png");
 Raw=AAF(Raw);
 imwrite(fliplr(imrotate(Raw,-90)),"./result/AAF.png");
 
-[Raw,Gain]=AWB(Raw,'GrayWorld');
+[Raw,Gain]=AWB(Raw,'PCA');
 imwrite(fliplr(imrotate(Raw,-90)),"./result/AWB.png");
 
 Raw=CNF(Raw,CNF_threshold,Gain);
